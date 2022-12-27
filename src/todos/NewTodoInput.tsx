@@ -1,0 +1,31 @@
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
+import { createTodo } from "./functions";
+
+export const NewTodoInput: React.FC = () => {
+  const [title, setTitle] = useState("");
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation((title: string) => createTodo(title), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    },
+  });
+
+  const handleInputTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = ev.target;
+    setTitle(value);
+  };
+
+  const handleClickCreateTitle = (title: string) => {
+    mutation.mutate(title);
+    setTitle("");
+  };
+
+  return (
+    <div>
+      <input type="text" onChange={handleInputTitle} value={title} />
+      <button onClick={() => handleClickCreateTitle(title)}>作成</button>
+    </div>
+  );
+};

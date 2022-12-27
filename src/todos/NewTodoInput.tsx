@@ -3,14 +3,8 @@ import { useMutation, useQueryClient } from "react-query";
 import { createTodo } from "./functions";
 
 export const NewTodoInput: React.FC = () => {
-  const [title, setTitle] = useState("");
-
   const queryClient = useQueryClient();
-  const mutation = useMutation((title: string) => createTodo(title), {
-    onSuccess: () => {
-      queryClient.invalidateQueries("todos");
-    },
-  });
+  const [title, setTitle] = useState("");
 
   const handleInputTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = ev.target;
@@ -18,7 +12,13 @@ export const NewTodoInput: React.FC = () => {
   };
 
   const handleClickCreateTitle = (title: string) => {
-    mutation.mutate(title);
+    const { mutate } = useMutation((title: string) => createTodo(title), {
+      onSuccess: () => {
+        queryClient.invalidateQueries("todos");
+      },
+    });
+
+    mutate(title);
     setTitle("");
   };
 

@@ -6,19 +6,19 @@ export const NewTodoInput: React.FC = () => {
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
 
+  const createTodoMutation = useMutation((title: string) => createTodo(title), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    },
+  });
+
   const handleInputTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = ev.target;
     setTitle(value);
   };
 
   const handleClickCreateTitle = (title: string) => {
-    const { mutate } = useMutation((title: string) => createTodo(title), {
-      onSuccess: () => {
-        queryClient.invalidateQueries("todos");
-      },
-    });
-
-    mutate(title);
+    createTodoMutation.mutate(title);
     setTitle("");
   };
 

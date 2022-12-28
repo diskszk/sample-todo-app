@@ -1,5 +1,5 @@
 import { NewTodoInput } from "./todos/NewTodoInput";
-import { TodoList } from "./todos/Component";
+import { TodoList } from "./todos/TodoList";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 

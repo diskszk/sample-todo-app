@@ -8,13 +8,14 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/client",
-      "packages/types"
+      "packages/*"
     ]
   },
   "scripts": {
     "cl:build": "yarn workspace client build",
-    "cl:lint": "yarn workspace client lint"
+    "cl:lint": "yarn workspace client lint",
+    "fn:lint": "yarn workspace functions lint",
+    "fn:shell": "yarn workspace functions shell"
   },
   "devDependencies": {
     "typescript": "^4.9.4"

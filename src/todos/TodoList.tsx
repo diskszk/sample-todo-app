@@ -4,17 +4,16 @@ import { TodoItem } from "./TodoItem";
 import { Todo } from "./types";
 
 export const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<undefined | Todo[]>(undefined);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const todosRef = db.collection("todos");
 
-    todosRef
-      .get()
-      .then((snapshots) => {
-        const data: Todo[] = snapshots.docs.map((snapshot) => {
+    try {
+      const unsubscribe = todosRef.onSnapshot((snapshots) => {
+        const todos: Todo[] = snapshots.docs.map((snapshot) => {
           const doc = snapshot.data();
 
           return {
@@ -23,17 +22,16 @@ export const TodoList: React.FC = () => {
             completed: doc.completed,
           };
         });
-
-        setTodos(data);
-      })
-      .catch(() => {
-        setIsError(true);
+        setTodos(todos);
       });
-  }, []);
 
-  if (todos === undefined) {
-    return <h2>Loading...</h2>;
-  }
+      return () => {
+        unsubscribe();
+      };
+    } catch {
+      setIsError(true);
+    }
+  }, []);
 
   if (isError) {
     return <h2>エラーが発生しました。</h2>;

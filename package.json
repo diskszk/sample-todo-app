@@ -19,6 +19,9 @@
     "server:serve": "yarn workspace server serve",
     "server:build": "yarn workspace server build"
   },
+  "dependencies": {
+    "@types/todo": "*"
+  },
   "devDependencies": {
     "typescript": "^4.9.4"
   }

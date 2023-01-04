@@ -1,7 +1,7 @@
 {
-  "name": "common",
+  "name": "@types/todo",
   "version": "1.0.0",
-  "types": "./todo.d.ts",
+  "types": "index.d.ts",
   "license": "MIT",
   "private": true,
   "devDependencies": {

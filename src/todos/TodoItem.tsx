@@ -1,5 +1,4 @@
-import { useQueryClient, useMutation } from "react-query";
-import { setCompleteTodo, setNotCompletedTodo, deleteTodo } from "./functions";
+import { db } from "../firebase";
 import { Todo } from "./types";
 
 type Props = {
@@ -7,42 +6,20 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const queryClient = useQueryClient();
-
-  const updateCompletedMutation = useMutation(
-    (id: string) => setCompleteTodo(id),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("todos");
-      },
-    }
-  );
-
-  const updateNotCompletedMutation = useMutation(
-    (id: string) => setNotCompletedTodo(id),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("todos");
-      },
-    }
-  );
-
-  const deleteTodoMutation = useMutation((id: string) => deleteTodo(id), {
-    onSuccess: () => {
-      queryClient.invalidateQueries("todos");
-    },
-  });
-
   const handleChangeCheckbox = async (
     ev: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { checked } = ev.target;
 
     if (checked) {
-      updateCompletedMutation.mutate(todo.id as string);
+      const todosRef = db.collection("todos");
+
+      await todosRef.doc(todo.id).update({ completed: true });
       alert("タスクを完了にしました。");
     } else {
-      updateNotCompletedMutation.mutate(todo.id as string);
+      const todosRef = db.collection("todos");
+
+      await todosRef.doc(todo.id).update({ completed: false });
       alert("タスクを未完了にしました。");
     }
   };
@@ -52,7 +29,9 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       alert("存在しないTodoです");
       return;
     }
-    deleteTodoMutation.mutate(todo.id);
+    const todosRef = db.collection("todos");
+
+    await todosRef.doc(todo.id).delete();
     alert("タスクを削除しました。");
   };
 

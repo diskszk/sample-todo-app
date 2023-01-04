@@ -1,26 +1,49 @@
-import React from "react";
-import { useQuery } from "react-query";
-import {
-  fetchAllTodos,
-} from "./functions";
+import React, { useEffect, useState } from "react";
+import { db } from "../firebase";
 import { TodoItem } from "./TodoItem";
 import { Todo } from "./types";
 
 export const TodoList: React.FC = () => {
-  const { data, isLoading, error } = useQuery<Todo[]>("todos", fetchAllTodos);
+  const [todos, setTodos] = useState<undefined | Todo[]>(undefined);
 
-  if (error) {
-    return <h2>Error</h2>;
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const todosRef = db.collection("todos");
+
+    todosRef
+      .get()
+      .then((snapshots) => {
+        const data: Todo[] = snapshots.docs.map((snapshot) => {
+          const doc = snapshot.data();
+
+          return {
+            id: snapshot.id,
+            title: doc.title,
+            completed: doc.completed,
+          };
+        });
+
+        setTodos(data);
+      })
+      .catch(() => {
+        setIsError(true);
+      });
+  }, []);
+
+  if (todos === undefined) {
+    return <h2>Loading...</h2>;
   }
 
-  if (isLoading) {
-    return <h2>Loading...</h2>;
+  if (isError) {
+    return <h2>エラーが発生しました。</h2>;
   }
 
   return (
     <ul>
-      {data && data.map((todo) => <TodoItem todo={todo} key={todo.id} />)}
+      {todos.map((todo) => (
+        <TodoItem todo={todo} key={todo.id} />
+      ))}
     </ul>
   );
 };
-

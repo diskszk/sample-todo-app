@@ -1,9 +1,12 @@
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import * as express from "express";
 
-// // Start writing functions
-// // https://firebase.google.com/docs/functions/typescript
+admin.initializeApp();
+const app = express();
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
+app.get("/helloworld", (req, res) => {
+  res.json("Hello Express");
 });
+
+export const api = functions.region("asia-northeast1").https.onRequest(app);

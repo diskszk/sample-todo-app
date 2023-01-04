@@ -16,6 +16,7 @@
     "cl:lint": "yarn workspace client lint",
     "server:lint": "yarn workspace server lint",
     "server:shell": "yarn workspace server shell",
+    "server:serve": "yarn workspace server serve",
     "server:build": "yarn workspace server build"
   },
   "devDependencies": {

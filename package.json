@@ -16,9 +16,6 @@
     "cl:build": "yarn workspace client build",
     "cl:lint": "yarn workspace client lint"
   },
-  "dependencies": {
-    "@types/todo": "*"
-  },
   "devDependencies": {
     "typescript": "^4.9.4"
   }

@@ -1,5 +1,5 @@
 {
-  "name": "@types/todo",
+  "name": "common",
   "version": "1.0.0",
   "types": "./todo.d.ts",
   "license": "MIT",

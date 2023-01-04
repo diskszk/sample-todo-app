@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "typeRoots": ["todo.d.ts"]
+  },
+  "extends": "@tsconfig/node16-strictest/tsconfig.json"
+}

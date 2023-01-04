@@ -1,5 +1,5 @@
 import { db } from "../firebase";
-import { Todo } from "./types";
+import { Todo } from "todo";
 
 type Props = {
   todo: Todo;

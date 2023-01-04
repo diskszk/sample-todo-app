@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { TodoItem } from "./TodoItem";
-import { Todo } from "./types";
+import { Todo } from "todo";
 
 export const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);

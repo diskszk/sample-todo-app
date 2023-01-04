@@ -1,0 +1,10 @@
+{
+  "name": "@types/todo",
+  "version": "1.0.0",
+  "types": "./todo.d.ts",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@tsconfig/node16-strictest": "^1.0.4"
+  }
+}

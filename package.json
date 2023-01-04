@@ -14,8 +14,9 @@
   "scripts": {
     "cl:build": "yarn workspace client build",
     "cl:lint": "yarn workspace client lint",
-    "fn:lint": "yarn workspace functions lint",
-    "fn:shell": "yarn workspace functions shell"
+    "server:lint": "yarn workspace server lint",
+    "server:shell": "yarn workspace server shell",
+    "server:build": "yarn workspace server build"
   },
   "devDependencies": {
     "typescript": "^4.9.4"

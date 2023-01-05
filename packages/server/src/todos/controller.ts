@@ -1,24 +1,45 @@
 import { Router } from "express";
-import { findAll } from "./model";
+import {
+  createTodo,
+  deleteTodo,
+  findAllTodos,
+  setCompleteTodo,
+  setIncompleteTodo,
+} from "./model";
 
+/* eslint new-cap: 0 */
 const router = Router();
 
 router.get("/todos", async (req, res) => {
+  const todos = await findAllTodos();
   res.status(200);
-  const todos = await findAll();
   res.json(todos);
 });
 
-router.post("/todos", (req, res) => {
-  res.status(201);
+router.post("/todos", async (req, res) => {
+  const body = req.body;
+  const { title } = body;
+
+  await createTodo(title);
+  res.status(201).end();
 });
 
-router.put("/todos/:id", (req, res) => {
-  res.status(200);
+router.delete("/todos/:id", async (req, res) => {
+  const { id } = req.params;
+  await deleteTodo(id);
+  res.status(200).end();
 });
 
-router.delete("/todos/:id", (req, res) => {
-  res.status(200);
+router.put("/todos/:id/completed", async (req, res) => {
+  const { id } = req.params;
+  await setCompleteTodo(id);
+  res.status(204).end();
+});
+
+router.put("/todos/:id/uncompleted", async (req, res) => {
+  const { id } = req.params;
+  await setIncompleteTodo(id);
+  res.status(204).end();
 });
 
 export default router;

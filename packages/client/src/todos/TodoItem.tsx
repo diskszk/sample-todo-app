@@ -1,37 +1,72 @@
-import { db } from "../firebase";
+import axios from "axios";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { Todo } from "todo";
+import { WEB_API_BASE_URL } from "./constants";
+
+async function setCompleteTodo(id: string) {
+  await axios.put(`${WEB_API_BASE_URL}/todos/${id}/completed`);
+}
+
+async function setIncompleteTodo(id: string) {
+  await axios.put(`${WEB_API_BASE_URL}/todos/${id}/uncompleted`);
+}
+
+async function deleteTodo(id: string) {
+  await axios.delete(`${WEB_API_BASE_URL}/todos/${id}`);
+}
 
 type Props = {
   todo: Todo;
 };
 
 export const TodoItem: React.FC<Props> = ({ todo }) => {
-  const handleChangeCheckbox = async (
-    ev: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const queryClient = useQueryClient();
+
+  const { mutate: updateCompleteMutate } = useMutation(
+    (id: string) => setCompleteTodo(id),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["todos"]);
+      },
+    }
+  );
+
+  const { mutate: updateIncompleteMutate } = useMutation(
+    (id: string) => setIncompleteTodo(id),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["todos"]);
+      },
+    }
+  );
+
+  const { mutate: deleteTodoMutate } = useMutation(
+    (id: string) => deleteTodo(id),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["todos"]);
+      },
+    }
+  );
+  const handleChangeCheckbox = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = ev.target;
 
     if (checked) {
-      const todosRef = db.collection("todos");
-
-      await todosRef.doc(todo.id).update({ completed: true });
+      updateCompleteMutate(todo.id);
       alert("タスクを完了にしました。");
     } else {
-      const todosRef = db.collection("todos");
-
-      await todosRef.doc(todo.id).update({ completed: false });
+      updateIncompleteMutate(todo.id);
       alert("タスクを未完了にしました。");
     }
   };
 
-  const handleClickDeleteButton = async () => {
+  const handleClickDeleteButton = () => {
     if (!todo.id) {
       alert("存在しないTodoです");
       return;
     }
-    const todosRef = db.collection("todos");
 
-    await todosRef.doc(todo.id).delete();
+    deleteTodoMutate(todo.id);
     alert("タスクを削除しました。");
   };
 

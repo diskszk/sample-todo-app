@@ -1,7 +1,21 @@
 import React, { useState } from "react";
-import { db } from "../firebase";
+import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { WEB_API_BASE_URL } from "./constants";
+
+async function postNewTodo(title: string) {
+  await axios.post(`${WEB_API_BASE_URL}/todos`, { title: title });
+}
 
 export const NewTodoInput: React.FC = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation((title: string) => postNewTodo(title), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["todos"]);
+    },
+  });
+
   const [title, setTitle] = useState("");
 
   const handleInputTitle = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -9,10 +23,8 @@ export const NewTodoInput: React.FC = () => {
     setTitle(value);
   };
 
-  const handleClickCreateTitle = async () => {
-    const todosRef = db.collection("todos");
-
-    await todosRef.add({ title: title, completed: false });
+  const handleClickCreateTitle = () => {
+    mutate(title);
     setTitle("");
   };
 

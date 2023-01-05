@@ -6,4 +6,5 @@ interface ImportMetaEnv {
   VITE_FIREBASE_STORAGE_BUCKET: string;
   VITE_FIREBASE_MESSAGING_SENDER_ID: string;
   VITE_FIREBASE_APP_ID: string;
+  VITE_CLOUD_FUNCTIONS_WEB_API_URL: string;
 }

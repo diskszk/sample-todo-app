@@ -28,6 +28,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       onSuccess: () => {
         queryClient.invalidateQueries(["todos"]);
       },
+      onError: () => {
+        alert("Todoの更新時にエラーが発生しました。");
+        return;
+      },
     }
   );
 
@@ -37,6 +41,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
       onSuccess: () => {
         queryClient.invalidateQueries(["todos"]);
       },
+      onError: () => {
+        alert("Todoの更新時にエラーが発生しました。");
+        return;
+      },
     }
   );
 
@@ -45,6 +53,10 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["todos"]);
+      },
+      onError: () => {
+        alert("Todoの更新時にエラーが発生しました。");
+        return;
       },
     }
   );
@@ -62,7 +74,7 @@ export const TodoItem: React.FC<Props> = ({ todo }) => {
 
   const handleClickDeleteButton = () => {
     if (!todo.id) {
-      alert("存在しないTodoです");
+      alert("Todoが存在しません。");
       return;
     }
 

@@ -14,6 +14,10 @@ export const NewTodoInput: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["todos"]);
     },
+    onError: () => {
+      alert("Todoの新規作成時にエラーが発生しました。");
+      return;
+    },
   });
 
   const [title, setTitle] = useState("");
